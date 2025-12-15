@@ -1,4 +1,16 @@
-// Обработка формы регистрации
+// Конфигурация EmailJS (замените на свои значения из кабинета EmailJS)
+const EMAILJS_SERVICE_ID = 'service_vozgexc';
+const EMAILJS_TEMPLATE_ID = 'template_7x22lpc';
+const EMAILJS_PUBLIC_KEY = '9FUMshrppMsHjDwqJ';
+
+// Инициализация EmailJS, если библиотека доступна
+if (window.emailjs) {
+    emailjs.init({
+        publicKey: EMAILJS_PUBLIC_KEY,
+    });
+}
+
+// Обработка формы регистрации через EmailJS
 document.getElementById('registration-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -23,99 +35,47 @@ document.getElementById('registration-form').addEventListener('submit', async fu
         return;
     }
     
-    // Готовим данные формы и явно прокидываем _replyto для почты
-    const formData = new FormData(form);
-    formData.set('_replyto', email);
-    formData.set('email', email);
-    
     // Показываем индикатор загрузки
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
     submitBtn.disabled = true;
     
+    if (!window.emailjs) {
+        showMessage('Ошибка: библиотека EmailJS не загрузилась. Попробуйте обновить страницу.', 'error');
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        return;
+    }
+
     try {
-        // Отправка данных на Formspree
-        const response = await fetch(form.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-        
-        console.log('Formspree Response Status:', response.status);
-        
-        if (response.ok) {
-            const result = await response.json();
-            console.log('Formspree Success Response:', result);
-            
-            // Показываем успешное сообщение
-            showMessage('Заявка успешно отправлена! Проверьте вашу почту для подтверждения.', 'success');
-            
-            // Сбрасываем форму
-            form.reset();
-            
-            // Показываем дополнительную информацию
-            setTimeout(() => {
-                showMessage('Письмо должно прийти в течение нескольких минут.', 'success');
-            }, 3000);
-            
-        } else {
-            // Пробуем получить текст ошибки
-            let errorText = `Ошибка ${response.status}`;
-            try {
-                const errorData = await response.json();
-                errorText = errorData.error || errorText;
-            } catch (e) {
-                // Не удалось распарсить JSON
-            }
-            
-            console.error('Formspree Error:', errorText);
-            throw new Error(errorText);
-        }
-        
+        // Отправка данных через EmailJS
+        const result = await emailjs.sendForm(
+            EMAILJS_SERVICE_ID,
+            EMAILJS_TEMPLATE_ID,
+            form
+        );
+
+        console.log('EmailJS Success Response:', result);
+
+        // Показываем успешное сообщение
+        showMessage('Заявка успешно отправлена! Проверьте вашу почту для подтверждения.', 'success');
+
+        // Сбрасываем форму
+        form.reset();
+
+        // Показываем дополнительную информацию
+        setTimeout(() => {
+            showMessage('Письмо должно прийти в течение нескольких минут.', 'success');
+        }, 3000);
+
     } catch (error) {
-        console.error('Ошибка отправки формы:', error);
-        
-        // Если AJAX не работает, пробуем стандартную отправку формы
-        if (error.message.includes('Failed to fetch') || error.message.includes('Network')) {
-            showMessage('Проблема с сетью. Пробуем отправить форму напрямую...', 'error');
-            
-            // Создаем временную iframe для отправки
-            const tempFrame = document.createElement('iframe');
-            tempFrame.name = 'formspree-submit-' + Date.now();
-            tempFrame.style.display = 'none';
-            document.body.appendChild(tempFrame);
-            
-            // Меняем target формы на iframe
-            form.target = tempFrame.name;
-            
-            // Восстанавливаем кнопку
+        console.error('Ошибка отправки через EmailJS:', error);
+        showMessage('Не удалось отправить заявку. Попробуйте еще раз позже.', 'error');
+    } finally {
+        setTimeout(() => {
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
-            
-            // Отправляем форму
-            form.submit();
-            
-            // Показываем сообщение об успехе через время
-            setTimeout(() => {
-                showMessage('Форма отправлена! Проверьте вашу почту в ближайшее время.', 'success');
-                document.body.removeChild(tempFrame);
-            }, 2000);
-            
-            return; // Выходим, так как форма отправляется стандартным способом
-            
-        } else {
-            showMessage(`Ошибка: ${error.message}. Попробуйте еще раз.`, 'error');
-        }
-    } finally {
-        // Восстанавливаем кнопку только если не было перенаправления
-        if (!form.hasAttribute('data-submitting')) {
-            setTimeout(() => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 3000);
-        }
+        }, 3000);
     }
 });
 

@@ -10,8 +10,19 @@ document.getElementById('registration-form').addEventListener('submit', async fu
     const formData = new FormData(form);
     
     // Валидация
-    if (!formData.get('name') || !formData.get('email') || !formData.get('agreement')) {
+    const name = form.querySelector('#name').value.trim();
+    const email = form.querySelector('#email').value.trim();
+    const agreement = form.querySelector('#agreement').checked;
+    
+    if (!name || !email || !agreement) {
         showMessage('Пожалуйста, заполните все обязательные поля', 'error');
+        return;
+    }
+    
+    // Проверка email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showMessage('Пожалуйста, введите корректный email адрес', 'error');
         return;
     }
     
@@ -21,87 +32,107 @@ document.getElementById('registration-form').addEventListener('submit', async fu
     submitBtn.disabled = true;
     
     try {
-        // ВАЖНО: Замените 'YOUR_FORMSPREE_ID' на ваш реальный ID из Formspree
-        const formspreeEndpoint = 'https://formspree.io/f/mvgenzjn';
-        
-        // Отправляем данные на Formspree
-        const response = await fetch(formspreeEndpoint, {
+        // Отправка данных на Formspree
+        const response = await fetch(form.action, {
             method: 'POST',
+            body: new FormData(form),
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name: formData.get('name'),
-                email: formData.get('email'),
-                experience: formData.get('experience'),
-                message: formData.get('message'),
-                agreement: formData.get('agreement') ? 'Согласен' : 'Не согласен',
-                source: 'CTF Registration Form',
-                timestamp: new Date().toLocaleString('ru-RU')
-            })
+                'Accept': 'application/json'
+            }
         });
         
+        console.log('Formspree Response Status:', response.status);
+        
         if (response.ok) {
-            showMessage('✅ Заявка успешно отправлена! Организаторы свяжутся с вами в ближайшее время.', 'success');
+            const result = await response.json();
+            console.log('Formspree Success Response:', result);
+            
+            // Показываем успешное сообщение
+            showMessage('Заявка успешно отправлена! Проверьте вашу почту для подтверждения.', 'success');
+            
+            // Сбрасываем форму
             form.reset();
             
-            // Дополнительно логируем успешную отправку
-            console.log('Form submitted successfully to Formspree');
+            // Показываем дополнительную информацию
+            setTimeout(() => {
+                showMessage('Письмо должно прийти в течение нескольких минут.', 'success');
+            }, 3000);
             
         } else {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Ошибка сервера');
+            // Пробуем получить текст ошибки
+            let errorText = `Ошибка ${response.status}`;
+            try {
+                const errorData = await response.json();
+                errorText = errorData.error || errorText;
+            } catch (e) {
+                // Не удалось распарсить JSON
+            }
+            
+            console.error('Formspree Error:', errorText);
+            throw new Error(errorText);
         }
         
     } catch (error) {
         console.error('Ошибка отправки формы:', error);
         
-        // Альтернативный вариант через FormData (иногда работает лучше)
-        if (error.message.includes('Failed to fetch')) {
-            showMessage('Проблема с соединением. Попробуйте отправить форму через форму ниже:', 'error');
-            showAlternativeEmailForm(formData);
+        // Если AJAX не работает, пробуем стандартную отправку формы
+        if (error.message.includes('Failed to fetch') || error.message.includes('Network')) {
+            showMessage('Проблема с сетью. Пробуем отправить форму напрямую...', 'error');
+            
+            // Создаем временную iframe для отправки
+            const tempFrame = document.createElement('iframe');
+            tempFrame.name = 'formspree-submit-' + Date.now();
+            tempFrame.style.display = 'none';
+            document.body.appendChild(tempFrame);
+            
+            // Меняем target формы на iframe
+            form.target = tempFrame.name;
+            
+            // Восстанавливаем кнопку
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            
+            // Отправляем форму
+            form.submit();
+            
+            // Показываем сообщение об успехе через время
+            setTimeout(() => {
+                showMessage('Форма отправлена! Проверьте вашу почту в ближайшее время.', 'success');
+                document.body.removeChild(tempFrame);
+            }, 2000);
+            
+            return; // Выходим, так как форма отправляется стандартным способом
+            
         } else {
-            showMessage(`Ошибка: ${error.message}. Пожалуйста, свяжитесь с организаторами напрямую.`, 'error');
+            showMessage(`Ошибка: ${error.message}. Попробуйте еще раз.`, 'error');
         }
     } finally {
-        // Восстанавливаем кнопку
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
+        // Восстанавливаем кнопку только если не было перенаправления
+        if (!form.hasAttribute('data-submitting')) {
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 3000);
+        }
     }
 });
-
-// Показывает альтернативный способ связи
-function showAlternativeEmailForm(formData) {
-    const contactSection = document.getElementById('contact');
-    const emailContent = `
-        <div class="alternative-contact" style="margin-top: 20px; padding: 20px; background: var(--secondary); border-radius: 10px;">
-            <h3><i class="fas fa-paper-plane"></i> Альтернативный способ регистрации</h3>
-            <p>Отправьте email организаторам с темой "Регистрация на CTF" на адрес:</p>
-            <p style="font-weight: bold; color: var(--accent);">ctf-organizers@example.com</p>
-            <p>Содержание письма:</p>
-            <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 5px; font-family: monospace; font-size: 0.9rem;">
-                Имя/команда: ${formData.get('name')}<br>
-                Email: ${formData.get('email')}<br>
-                Размер команды: ${formData.get('team-size')}<br>
-                Опыт: ${formData.get('experience')}<br>
-                Сообщение: ${formData.get('message') || 'нет'}
-            </div>
-        </div>
-    `;
-    
-    contactSection.insertAdjacentHTML('beforeend', emailContent);
-}
 
 // Функция для показа сообщений
 function showMessage(text, type) {
     const formMessage = document.getElementById('form-message');
-    formMessage.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${text}`;
+    formMessage.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+            <span>${text}</span>
+        </div>
+    `;
     formMessage.className = `form-message ${type}`;
     
-    // Автоматически скрываем сообщение через 8 секунд
-    setTimeout(() => {
-        formMessage.innerHTML = '';
-        formMessage.className = 'form-message';
-    }, 8000);
+    // Автоматически скрываем только ошибки
+    if (type === 'error') {
+        setTimeout(() => {
+            formMessage.innerHTML = '';
+            formMessage.className = 'form-message';
+        }, 5000);
+    }
 }

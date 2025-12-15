@@ -343,24 +343,60 @@ body {
     text-align: center;
 }
 
+/* Стили для сообщений формы */
 .form-message {
-    margin-top: 2rem;
-    padding: 1rem;
-    border-radius: 5px;
-    text-align: center;
+    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    text-align: left;
     font-weight: 500;
+    transition: all 0.3s;
+    border-left: 4px solid transparent;
 }
 
 .form-message.success {
-    background-color: rgba(78, 205, 196, 0.2);
-    color: var(--success);
-    border: 1px solid var(--success);
+    background-color: rgba(100, 255, 218, 0.15);
+    color: #64ffda;
+    border-left-color: #64ffda;
 }
 
 .form-message.error {
-    background-color: rgba(255, 107, 107, 0.2);
-    color: var(--danger);
-    border: 1px solid var(--danger);
+    background-color: rgba(255, 107, 107, 0.15);
+    color: #ff6b6b;
+    border-left-color: #ff6b6b;
+}
+
+.form-message i {
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+/* Анимация спиннера */
+.fa-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Стили для проверки связи */
+.debug-info {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--secondary);
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.debug-info:hover {
+    opacity: 1;
 }
 
 /* Контакты */

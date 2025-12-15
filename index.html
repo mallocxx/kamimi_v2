@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CTF Competition - Cyber Challenge 2025</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;500&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <!-- Навигация -->
     <nav class="navbar">
@@ -41,8 +45,10 @@
         <!-- О соревновании -->
         <section id="about" class="section">
             <h2><i class="fas fa-flag"></i> О соревновании</h2>
-            <p>Capture The Flag (CTF) — это кибербезопасное соревнование, где участники решают задачи из различных областей информационной безопасности: криптография, стеганография, веб-безопасность, обратная инженерия и анализ сетевого трафика.</p>
-            
+            <p>Capture The Flag (CTF) — это кибербезопасное соревнование, где участники решают задачи из различных
+                областей информационной безопасности: криптография, стеганография, веб-безопасность, обратная инженерия
+                и анализ сетевого трафика.</p>
+
             <div class="features">
                 <div class="feature">
                     <i class="fas fa-shield-alt"></i>
@@ -73,7 +79,8 @@
             <div class="rules-list">
                 <div class="rule">
                     <h3>1. Формат соревнования</h3>
-                    <p>Соревнование проходит в формате jeopardy. Участникам предоставляется набор независимых задач различной сложности.</p>
+                    <p>Соревнование проходит в формате jeopardy. Участникам предоставляется набор независимых задач
+                        различной сложности.</p>
                 </div>
                 <div class="rule">
                     <h3>2. Категории задач</h3>
@@ -85,7 +92,8 @@
                 </div>
                 <div class="rule">
                     <h3>4. Запрещенные действия</h3>
-                    <p>Атаки на инфраструктуру соревнования, атаки на других участников, обмен флагами между командами.</p>
+                    <p>Атаки на инфраструктуру соревнования, атаки на других участников, обмен флагами между командами.
+                    </p>
                 </div>
             </div>
         </section>
@@ -128,19 +136,24 @@
         <!-- Регистрация -->
         <section id="register" class="section">
             <h2><i class="fas fa-user-plus"></i> Регистрация</h2>
-            <p class="section-intro">Заполните форму ниже для регистрации на соревнование. После отправки формы организаторы свяжутся с вами по email.</p>
-            
-            <form id="registration-form" class="registration-form" action="https://formspree.io/f/mvgenzjn" method="POST">
+            <p class="section-intro">Заполните форму ниже для регистрации на соревнование. После отправки формы
+                организаторы свяжутся с вами по email.</p>
+
+            <form id="registration-form" class="registration-form" action="https://formspree.io/f/mvgenzjn"
+                method="POST">
+                <input type="hidden" name="_subject" value="Новая регистрация на CTF 2024">
+                <input type="hidden" name="_language" value="ru">
+                <input type="text" name="_gotcha" style="display:none">
                 <div class="form-group">
                     <label for="name">ФИО или имя пользователя *</label>
                     <input type="text" id="name" name="name" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="email">Email для связи *</label>
                     <input type="email" id="email" name="email" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="experience">Уровень опыта в CTF</label>
                     <select id="experience" name="experience">
@@ -149,21 +162,23 @@
                         <option value="advanced">Опытный участник (более 3 соревнований)</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="message">Дополнительная информация (опционально)</label>
-                    <textarea id="message" name="message" rows="4" placeholder="Укажите дополнительную информацию, пожелания или вопросы..."></textarea>
+                    <textarea id="message" name="message" rows="4"
+                        placeholder="Укажите дополнительную информацию, пожелания или вопросы..."></textarea>
                 </div>
-                
+
                 <div class="form-group checkbox">
                     <input type="checkbox" id="agreement" name="agreement" required>
-                    <label for="agreement">Я согласен с правилами соревнования и обработкой персональных данных *</label>
+                    <label for="agreement">Я согласен с правилами соревнования и обработкой персональных данных
+                        *</label>
                 </div>
-                
+
                 <button type="submit" class="submit-btn">Отправить заявку</button>
                 <p class="form-note">* Обязательные для заполнения поля</p>
             </form>
-            
+
             <div id="form-message" class="form-message"></div>
         </section>
 
@@ -205,4 +220,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

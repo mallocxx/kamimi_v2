@@ -1,7 +1,7 @@
 // Конфигурация EmailJS (замените на свои значения из кабинета EmailJS)
 const EMAILJS_SERVICE_ID = 'service_vozgexc';
 const EMAILJS_TEMPLATE_ID = 'template_7x22lpc';
-const EMAILJS_PUBLIC_KEY = '9FUMshrppMsHjDwqJ';
+const EMAILJS_PUBLIC_KEY = 'vVIzWlWfYaCowNF76';
 
 // Инициализация EmailJS, если библиотека доступна
 if (window.emailjs) {

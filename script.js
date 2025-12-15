@@ -5,9 +5,8 @@ const EMAILJS_PUBLIC_KEY = 'vVIzWlWfYaCowNF76';
 
 // Инициализация EmailJS, если библиотека доступна
 if (window.emailjs) {
-    emailjs.init({
-        publicKey: EMAILJS_PUBLIC_KEY,
-    });
+    // Для CDN-версии корректная форма: emailjs.init('PUBLIC_KEY');
+    emailjs.init(EMAILJS_PUBLIC_KEY);
 }
 
 // Обработка формы регистрации через EmailJS
@@ -52,7 +51,8 @@ document.getElementById('registration-form').addEventListener('submit', async fu
         const result = await emailjs.sendForm(
             EMAILJS_SERVICE_ID,
             EMAILJS_TEMPLATE_ID,
-            form
+            form,
+            EMAILJS_PUBLIC_KEY
         );
 
         console.log('EmailJS Success Response:', result);

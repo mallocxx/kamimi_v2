@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTF Competition - Cyber Challenge 2024</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">CTF<span>2024</span></a>
+            <div class="nav-links">
+                <a href="#about">О соревновании</a>
+                <a href="#rules">Правила</a>
+                <a href="#schedule">Расписание</a>
+                <a href="#register">Регистрация</a>
+                <a href="#contact">Контакты</a>
+            </div>
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Герой-секция -->
+    <header class="hero">
+        <div class="container">
+            <h1>CTF CYBER CHALLENGE 2024</h1>
+            <p class="subtitle">Захвати флаг, защити будущее</p>
+            <p class="date">15-17 ноября 2024 | Онлайн-формат</p>
+            <a href="#register" class="cta-button">Зарегистрироваться сейчас</a>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="container">
+        <!-- О соревновании -->
+        <section id="about" class="section">
+            <h2><i class="fas fa-flag"></i> О соревновании</h2>
+            <p>Capture The Flag (CTF) — это кибербезопасное соревнование, где участники решают задачи из различных областей информационной безопасности: криптография, стеганография, веб-безопасность, обратная инженерия и анализ сетевого трафика.</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Безопасность</h3>
+                    <p>Проверьте свои навыки в реальных сценариях кибербезопасности</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-trophy"></i>
+                    <h3>Призы</h3>
+                    <p>Ценные призы для победителей и сертификаты для всех участников</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-users"></i>
+                    <h3>Команды</h3>
+                    <p>Участвуйте индивидуально или в командах до 5 человек</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-globe"></i>
+                    <h3>Доступность</h3>
+                    <p>Онлайн-формат позволяет участвовать из любой точки мира</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Правила -->
+        <section id="rules" class="section">
+            <h2><i class="fas fa-book"></i> Правила</h2>
+            <div class="rules-list">
+                <div class="rule">
+                    <h3>1. Формат соревнования</h3>
+                    <p>Соревнование проходит в формате jeopardy. Участникам предоставляется набор независимых задач различной сложности.</p>
+                </div>
+                <div class="rule">
+                    <h3>2. Категории задач</h3>
+                    <p>Криптография, веб-безопасность, стеганография, форензика, реверс-инжиниринг, pwn.</p>
+                </div>
+                <div class="rule">
+                    <h3>3. Продолжительность</h3>
+                    <p>48 часов непрерывного соревнования. Регистрация открывается за месяц до начала.</p>
+                </div>
+                <div class="rule">
+                    <h3>4. Запрещенные действия</h3>
+                    <p>Атаки на инфраструктуру соревнования, атаки на других участников, обмен флагами между командами.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Расписание -->
+        <section id="schedule" class="section">
+            <h2><i class="fas fa-calendar-alt"></i> Расписание</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">1 октября</div>
+                    <div class="timeline-content">
+                        <h3>Открытие регистрации</h3>
+                        <p>Начало приема заявок на участие</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">14 ноября</div>
+                    <div class="timeline-content">
+                        <h3>Технический брифинг</h3>
+                        <p>Инструктаж по использованию платформы</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">15 ноября</div>
+                    <div class="timeline-content">
+                        <h3>Начало соревнования</h3>
+                        <p>Старт в 10:00 по Московскому времени</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">17 ноября</div>
+                    <div class="timeline-content">
+                        <h3>Завершение и подведение итогов</h3>
+                        <p>Окончание в 10:00, объявление результатов в 14:00</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Регистрация -->
+        <section id="register" class="section">
+            <h2><i class="fas fa-user-plus"></i> Регистрация</h2>
+            <p class="section-intro">Заполните форму ниже для регистрации на соревнование. После отправки формы организаторы свяжутся с вами по email.</p>
+            
+            <form id="registration-form" class="registration-form">
+                <div class="form-group">
+                    <label for="name">ФИО или название команды *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email для связи *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="team-size">Количество участников в команде</label>
+                    <select id="team-size" name="team-size">
+                        <option value="1">1 (индивидуальное участие)</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5 (максимум)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="experience">Уровень опыта в CTF</label>
+                    <select id="experience" name="experience">
+                        <option value="beginner">Новичок (первое соревнование)</option>
+                        <option value="intermediate">Средний уровень (1-2 соревнования)</option>
+                        <option value="advanced">Опытный участник (более 3 соревнований)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Дополнительная информация (опционально)</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Укажите дополнительную информацию, пожелания или вопросы..."></textarea>
+                </div>
+                
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="agreement" name="agreement" required>
+                    <label for="agreement">Я согласен с правилами соревнования и обработкой персональных данных *</label>
+                </div>
+                
+                <button type="submit" class="submit-btn">Отправить заявку</button>
+                <p class="form-note">* Обязательные для заполнения поля</p>
+            </form>
+            
+            <div id="form-message" class="form-message"></div>
+        </section>
+
+        <!-- Контакты -->
+        <section id="contact" class="section">
+            <h2><i class="fas fa-envelope"></i> Контакты организаторов</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Email</h3>
+                    <p>ctf-organizers@example.com</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-comment-alt"></i>
+                    <h3>Telegram-канал</h3>
+                    <p>@ctf_competition_2024</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-question-circle"></i>
+                    <h3>Техническая поддержка</h3>
+                    <p>support@ctf2024.example.com</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container">
+            <p>CTF Cyber Challenge 2024 | Все права защищены</p>
+            <p class="footer-note">Сайт использует защищенное HTTPS соединение для безопасности данных</p>
+            <div class="footer-links">
+                <a href="#"><i class="fab fa-telegram"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

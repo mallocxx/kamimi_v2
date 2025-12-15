@@ -1,30 +1,3 @@
-// Открытие/закрытие мобильного меню
-document.querySelector('.menu-toggle').addEventListener('click', function() {
-    document.querySelector('.nav-links').classList.toggle('active');
-});
-
-// Плавная прокрутка для навигационных ссылок
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-        
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-            // Закрываем мобильное меню если открыто
-            document.querySelector('.nav-links').classList.remove('active');
-            
-            // Плавная прокрутка
-            window.scrollTo({
-                top: targetElement.offsetTop - 80,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
 // Обработка формы регистрации
 document.getElementById('registration-form').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -35,125 +8,101 @@ document.getElementById('registration-form').addEventListener('submit', async fu
     
     // Получаем данные формы
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
     
     // Валидация
-    if (!data.name || !data.email || !data.agreement) {
+    if (!formData.get('name') || !formData.get('email') || !formData.get('agreement')) {
         showMessage('Пожалуйста, заполните все обязательные поля', 'error');
         return;
     }
     
     // Показываем индикатор загрузки
-    submitBtn.innerHTML = 'Отправка...';
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
     submitBtn.disabled = true;
     
     try {
-        // Для работы этой части нужно зарегистрироваться на formspree.io
-        // Замените 'YOUR_FORMSPREE_ID' на ваш email из Formspree
+        // ВАЖНО: Замените 'YOUR_FORMSPREE_ID' на ваш реальный ID из Formspree
+        const formspreeEndpoint = 'https://formspree.io/f/YOUR_FORMSPREE_ID';
         
-        // Альтернатива 1: Используйте Formspree (рекомендуется)
-        const response = await fetch('https://formspree.io/f/mvgenzjn', {
+        // Отправляем данные на Formspree
+        const response = await fetch(formspreeEndpoint, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({
+                name: formData.get('name'),
+                email: formData.get('email'),
+                teamSize: formData.get('team-size'),
+                experience: formData.get('experience'),
+                message: formData.get('message'),
+                agreement: formData.get('agreement') ? 'Согласен' : 'Не согласен',
+                source: 'CTF Registration Form',
+                timestamp: new Date().toLocaleString('ru-RU')
+            })
         });
         
-        // Альтернатива 2: Имитация отправки (для демонстрации)
-        // Удалите этот блок и раскомментируйте блок выше для реальной отправки
-        // await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // // Имитация успешной отправки
-        // const success = Math.random() > 0.1; // 90% шанс успеха для демо
-        
-        // if (success) {
-        //     showMessage('Заявка успешно отправлена! Организаторы свяжутся с вами в ближайшее время.', 'success');
-        //     form.reset();
+        if (response.ok) {
+            showMessage('✅ Заявка успешно отправлена! Организаторы свяжутся с вами в ближайшее время.', 'success');
+            form.reset();
             
-        //     // Отправляем уведомление (имитация)
-        //     sendNotificationToOrganizer(data);
-        // } else {
-        //     throw new Error('Ошибка при отправке');
-        // }
+            // Дополнительно логируем успешную отправку
+            console.log('Form submitted successfully to Formspree');
+            
+        } else {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Ошибка сервера');
+        }
         
     } catch (error) {
-        console.error('Ошибка:', error);
-        showMessage('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз или свяжитесь с организаторами.', 'error');
+        console.error('Ошибка отправки формы:', error);
+        
+        // Альтернативный вариант через FormData (иногда работает лучше)
+        if (error.message.includes('Failed to fetch')) {
+            showMessage('Проблема с соединением. Попробуйте отправить форму через форму ниже:', 'error');
+            showAlternativeEmailForm(formData);
+        } else {
+            showMessage(`Ошибка: ${error.message}. Пожалуйста, свяжитесь с организаторами напрямую.`, 'error');
+        }
     } finally {
         // Восстанавливаем кнопку
-        submitBtn.innerHTML = 'Отправить заявку';
+        submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
     }
 });
 
+// Показывает альтернативный способ связи
+function showAlternativeEmailForm(formData) {
+    const contactSection = document.getElementById('contact');
+    const emailContent = `
+        <div class="alternative-contact" style="margin-top: 20px; padding: 20px; background: var(--secondary); border-radius: 10px;">
+            <h3><i class="fas fa-paper-plane"></i> Альтернативный способ регистрации</h3>
+            <p>Отправьте email организаторам с темой "Регистрация на CTF" на адрес:</p>
+            <p style="font-weight: bold; color: var(--accent);">ctf-organizers@example.com</p>
+            <p>Содержание письма:</p>
+            <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 5px; font-family: monospace; font-size: 0.9rem;">
+                Имя/команда: ${formData.get('name')}<br>
+                Email: ${formData.get('email')}<br>
+                Размер команды: ${formData.get('team-size')}<br>
+                Опыт: ${formData.get('experience')}<br>
+                Сообщение: ${formData.get('message') || 'нет'}
+            </div>
+        </div>
+    `;
+    
+    contactSection.insertAdjacentHTML('beforeend', emailContent);
+}
+
 // Функция для показа сообщений
 function showMessage(text, type) {
     const formMessage = document.getElementById('form-message');
-    formMessage.textContent = text;
+    formMessage.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${text}`;
     formMessage.className = `form-message ${type}`;
     
-    // Автоматически скрываем сообщение через 5 секунд
+    // Автоматически скрываем сообщение через 8 секунд
     setTimeout(() => {
-        formMessage.textContent = '';
+        formMessage.innerHTML = '';
         formMessage.className = 'form-message';
-    }, 5000);
+    }, 8000);
 }
-
-// // Функция для отправки уведомления организатору (имитация)
-// function sendNotificationToOrganizer(data) {
-//     console.log('Уведомление организатору:');
-//     console.log('Новая регистрация на CTF:');
-//     console.log(`Имя/команда: ${data.name}`);
-//     console.log(`Email: ${data.email}`);
-//     console.log(`Размер команды: ${data['team-size']} человек`);
-//     console.log(`Опыт: ${data.experience}`);
-//     console.log(`Дополнительная информация: ${data.message || 'не указана'}`);
-//     console.log('---');
-    
-//     // В реальном приложении здесь будет:
-//     // 1. Отправка email через сервис типа EmailJS, Formspree или SMTP
-//     // 2. Или отправка запроса на ваш сервер
-// }
-
-// Добавляем эффект при скролле для навигации
-window.addEventListener('scroll', function() {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 100) {
-        navbar.style.backgroundColor = 'rgba(10, 25, 47, 0.98)';
-    } else {
-        navbar.style.backgroundColor = 'rgba(10, 25, 47, 0.95)';
-    }
-});
-
-// Анимация для таймлайна
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Наблюдаем за элементами таймлайна
-document.querySelectorAll('.timeline-item').forEach(item => {
-    item.style.opacity = '0';
-    item.style.transform = 'translateY(20px)';
-    item.style.transition = 'opacity 0.5s, transform 0.5s';
-    observer.observe(item);
-});
-
-// Инициализация
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('CTF сайт загружен');
-    console.log('Для работы отправки форм:');
-    console.log('1. Зарегистрируйтесь на formspree.io');
-    console.log('2. Замените YOUR_FORMSPREE_ID в script.js на ваш ID');
-    console.log('3. Протестируйте отправку формы');
-});

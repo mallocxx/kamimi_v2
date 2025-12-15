@@ -22,7 +22,7 @@ document.getElementById('registration-form').addEventListener('submit', async fu
     
     try {
         // ВАЖНО: Замените 'YOUR_FORMSPREE_ID' на ваш реальный ID из Formspree
-        const formspreeEndpoint = 'https://formspree.io/f/YOUR_FORMSPREE_ID';
+        const formspreeEndpoint = 'https://formspree.io/f/mvgenzjn';
         
         // Отправляем данные на Formspree
         const response = await fetch(formspreeEndpoint, {

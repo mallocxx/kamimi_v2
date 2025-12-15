@@ -34,7 +34,6 @@ document.getElementById('registration-form').addEventListener('submit', async fu
             body: JSON.stringify({
                 name: formData.get('name'),
                 email: formData.get('email'),
-                teamSize: formData.get('team-size'),
                 experience: formData.get('experience'),
                 message: formData.get('message'),
                 agreement: formData.get('agreement') ? 'Согласен' : 'Не согласен',

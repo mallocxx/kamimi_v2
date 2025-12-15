@@ -136,3 +136,8 @@ function showMessage(text, type) {
         }, 5000);
     }
 }
+
+// Автоматическое заполнение _replyto
+document.getElementById('email').addEventListener('input', function() {
+    document.getElementById('auto-replyto').value = this.value;
+});

@@ -141,9 +141,13 @@
 
             <form id="registration-form" class="registration-form" action="https://formspree.io/f/mvgenzjn"
                 method="POST">
+
                 <input type="hidden" name="_subject" value="Новая регистрация на CTF 2024">
                 <input type="hidden" name="_language" value="ru">
                 <input type="text" name="_gotcha" style="display:none">
+
+                <input type="hidden" name="_replyto" value="" id="auto-replyto">
+
                 <div class="form-group">
                     <label for="name">ФИО или имя пользователя *</label>
                     <input type="text" id="name" name="name" required>

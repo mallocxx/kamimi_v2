@@ -6,9 +6,6 @@ document.getElementById('registration-form').addEventListener('submit', async fu
     const submitBtn = form.querySelector('.submit-btn');
     const formMessage = document.getElementById('form-message');
     
-    // Получаем данные формы
-    const formData = new FormData(form);
-    
     // Валидация
     const name = form.querySelector('#name').value.trim();
     const email = form.querySelector('#email').value.trim();
@@ -26,6 +23,11 @@ document.getElementById('registration-form').addEventListener('submit', async fu
         return;
     }
     
+    // Готовим данные формы и явно прокидываем _replyto для почты
+    const formData = new FormData(form);
+    formData.set('_replyto', email);
+    formData.set('email', email);
+    
     // Показываем индикатор загрузки
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
@@ -35,7 +37,7 @@ document.getElementById('registration-form').addEventListener('submit', async fu
         // Отправка данных на Formspree
         const response = await fetch(form.action, {
             method: 'POST',
-            body: new FormData(form),
+            body: formData,
             headers: {
                 'Accept': 'application/json'
             }
@@ -140,4 +142,15 @@ function showMessage(text, type) {
 // Автоматическое заполнение _replyto
 document.getElementById('email').addEventListener('input', function() {
     document.getElementById('auto-replyto').value = this.value;
+});
+
+// Плавная прокрутка к форме регистрации по клику на кнопки с ссылкой на #register
+document.querySelectorAll('a[href="#register"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.getElementById('register');
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
 });

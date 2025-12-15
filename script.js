@@ -52,30 +52,30 @@ document.getElementById('registration-form').addEventListener('submit', async fu
         // Замените 'YOUR_FORMSPREE_ID' на ваш email из Formspree
         
         // Альтернатива 1: Используйте Formspree (рекомендуется)
-        // const response = await fetch('https://formspree.io/f/YOUR_FORMSPREE_ID', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(data)
-        // });
+        const response = await fetch('https://formspree.io/f/mvgenzjn', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
         
         // Альтернатива 2: Имитация отправки (для демонстрации)
         // Удалите этот блок и раскомментируйте блок выше для реальной отправки
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        // await new Promise(resolve => setTimeout(resolve, 1500));
         
-        // Имитация успешной отправки
-        const success = Math.random() > 0.1; // 90% шанс успеха для демо
+        // // Имитация успешной отправки
+        // const success = Math.random() > 0.1; // 90% шанс успеха для демо
         
-        if (success) {
-            showMessage('Заявка успешно отправлена! Организаторы свяжутся с вами в ближайшее время.', 'success');
-            form.reset();
+        // if (success) {
+        //     showMessage('Заявка успешно отправлена! Организаторы свяжутся с вами в ближайшее время.', 'success');
+        //     form.reset();
             
-            // Отправляем уведомление (имитация)
-            sendNotificationToOrganizer(data);
-        } else {
-            throw new Error('Ошибка при отправке');
-        }
+        //     // Отправляем уведомление (имитация)
+        //     sendNotificationToOrganizer(data);
+        // } else {
+        //     throw new Error('Ошибка при отправке');
+        // }
         
     } catch (error) {
         console.error('Ошибка:', error);
@@ -100,21 +100,21 @@ function showMessage(text, type) {
     }, 5000);
 }
 
-// Функция для отправки уведомления организатору (имитация)
-function sendNotificationToOrganizer(data) {
-    console.log('Уведомление организатору:');
-    console.log('Новая регистрация на CTF:');
-    console.log(`Имя/команда: ${data.name}`);
-    console.log(`Email: ${data.email}`);
-    console.log(`Размер команды: ${data['team-size']} человек`);
-    console.log(`Опыт: ${data.experience}`);
-    console.log(`Дополнительная информация: ${data.message || 'не указана'}`);
-    console.log('---');
+// // Функция для отправки уведомления организатору (имитация)
+// function sendNotificationToOrganizer(data) {
+//     console.log('Уведомление организатору:');
+//     console.log('Новая регистрация на CTF:');
+//     console.log(`Имя/команда: ${data.name}`);
+//     console.log(`Email: ${data.email}`);
+//     console.log(`Размер команды: ${data['team-size']} человек`);
+//     console.log(`Опыт: ${data.experience}`);
+//     console.log(`Дополнительная информация: ${data.message || 'не указана'}`);
+//     console.log('---');
     
-    // В реальном приложении здесь будет:
-    // 1. Отправка email через сервис типа EmailJS, Formspree или SMTP
-    // 2. Или отправка запроса на ваш сервер
-}
+//     // В реальном приложении здесь будет:
+//     // 1. Отправка email через сервис типа EmailJS, Formspree или SMTP
+//     // 2. Или отправка запроса на ваш сервер
+// }
 
 // Добавляем эффект при скролле для навигации
 window.addEventListener('scroll', function() {
